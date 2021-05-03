@@ -22,6 +22,8 @@ run_MR <- function(exposure_data,
                    MR_pruning_dist = 500,
                    MR_pruning_LD = 0,
                    MR_reverse = NULL,
+                   MR_reference = NULL,
+                   MR_plink = NULL
                    verbose = TRUE){
 
   # here we need to join exposure and outcome data
@@ -64,9 +66,27 @@ run_MR <- function(exposure_data,
     if(verbose) cat("   Pruning : distance : ", MR_pruning_dist, "Kb", " - LD threshold : ", MR_pruning_LD, "\n")
     # Do pruning, chr by chr
     SNPsToKeep = c()
-    for(chr in unique(ToPrune$chr_name)){
+
+    if(is.null(MR_plink)){
+      if(verbose) cat("Using TwoSampleData::clump_data")
+      for(chr in unique(ToPrune$chr_name)){
       SNPsToKeep = c(SNPsToKeep, TwoSampleMR::clump_data(ToPrune[ToPrune$chr_name==chr,], clump_kb = MR_pruning_dist, clump_r2 = MR_pruning_LD)$SNP)
     }
+      } else {
+      if(verbose) cat("Using ieugwasr::ld_clump with local PLINK")
+        ToPrune2 = ToPrune %>%
+         dplyr::select(rsid = SNP, chr = chr_name, pos = chr_start, pval = pval.exposure)
+         SNPsToKeep = test <- ieugwasr::ld_clump(
+           dat = ToPrune2,
+           clump_kb = MR_pruning_dist,
+           clump_r2 = MR_pruning_LD,
+           pop = "EUR",
+           bfile = MR_reference,
+           plink_bin = MR_plink
+         ) %>%
+         pull(rsid)
+      }
+
   } else{# distance pruning
     prune_byDistance <- function(data, prune.dist=100, byP=T) {
       # data should be : 1st column rs / 2nd column chr / 3rd column pos / 4th column stat

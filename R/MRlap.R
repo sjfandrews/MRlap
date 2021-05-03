@@ -62,6 +62,8 @@ MRlap <- function(exposure,
                   MR_pruning_dist = 500,
                   MR_pruning_LD = 0,
                   MR_reverse = 1e-3,
+                  MR_reference = NULL,
+                  MR_plink = NULL
                   s=10000,
                   save_logfiles = FALSE,
                   verbose = TRUE) {
@@ -160,6 +162,7 @@ MRlap <- function(exposure,
   # returns alpha - SE alpha - instruments (needed for corrected effect SE)
   MR_results = run_MR(exposure_data, outcome_data, MR_threshold,
                       MR_pruning_dist, MR_pruning_LD, MR_reverse,
+                      MR_reference, MR_plink,
                       verbose)
   # -> alpha_obs, alpha_obs_se, n_exp, n_out, IVs
   # 3 : get corrected effect
