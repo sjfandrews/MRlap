@@ -65,7 +65,7 @@ run_MR <- function(exposure_data,
     # Do pruning, chr by chr
     SNPsToKeep = c()
     for(chr in unique(ToPrune$chr_name)){
-      SNPsToKeep = c(SNPsToKeep, suppressMessages(TwoSampleMR::clump_data(ToPrune[ToPrune$chr_name==chr,], clump_kb = MR_pruning_dist, clump_r2 = MR_pruning_LD)$SNP))
+      SNPsToKeep = c(SNPsToKeep, TwoSampleMR::clump_data(ToPrune[ToPrune$chr_name==chr,], clump_kb = MR_pruning_dist, clump_r2 = MR_pruning_LD)$SNP)
     }
   } else{# distance pruning
     prune_byDistance <- function(data, prune.dist=100, byP=T) {
