@@ -23,7 +23,7 @@ run_MR <- function(exposure_data,
                    MR_pruning_LD = 0,
                    MR_reverse = NULL,
                    MR_reference = NULL,
-                   MR_plink = NULL
+                   MR_plink = NULL,
                    verbose = TRUE){
 
   # here we need to join exposure and outcome data
