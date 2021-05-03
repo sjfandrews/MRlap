@@ -63,7 +63,7 @@ MRlap <- function(exposure,
                   MR_pruning_LD = 0,
                   MR_reverse = 1e-3,
                   MR_reference = NULL,
-                  MR_plink = NULL
+                  MR_plink = NULL,
                   s=10000,
                   save_logfiles = FALSE,
                   verbose = TRUE) {
